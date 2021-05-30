@@ -3,7 +3,7 @@
         <!-- Start content -->
         <div class="content">
             <div class="mb-0 jumbotron jumbotron-fluid bg-info">
-                <h1 class="mt-5 mb-3 text-center text-uppercase text-white">Cinta Ilmu, Gemar Belajar</h1>
+                <h1 class="mt-5 mb-5 text-center text-white text-uppercase" style="font-size:50px;">Cinta Ilmu, Gemar Belajar</h1>
                 <div class="container">
                     <form action="<?=site_url('Search/search')?>" autocomplete="off" class="form-horizontal" method="post" accept-charset="utf-8">
                         <div class="p-2 card">
@@ -50,42 +50,44 @@
                             <div class="row">
                                 <?=$this->renderSection('content')?>
                                 <div class="col-3">
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item mr-1" role="presentation">
-                                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Materi</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Artikel</a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                            <div class="card bg-info mt-3">
-                                                <div class="text-white card-header">
-                                                    Total Materi
-                                                </div>
-                                                <ul class="list-group list-group-flush">
-                                                    <?php $dataMateri = $db->table('materi');
-                                                        $queryMateri = $dataMateri->groupBy('kategori_id')->get();
-                                                    ?>
-
-                                                    <?php foreach ($queryMateri->getResult() as $rowMateri): ?>
-                                                        <?php
-                                                            $kategoriName = $dataKategori->where('id', $rowMateri->kategori_id)->get();
-                                                            $countMateriByKategori = $dataMateri->where('kategori_id', $rowMateri->kategori_id)->get()->getResultArray();
+                                    <div class="mt-3">
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="mr-1 nav-item" role="presentation">
+                                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Materi</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Artikel</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                                <div class="mt-3 card bg-info">
+                                                    <div class="text-white card-header">
+                                                        Total Materi
+                                                    </div>
+                                                    <ul class="list-group list-group-flush">
+                                                        <?php $dataMateri = $db->table('materi');
+                                                            $queryMateri = $dataMateri->groupBy('kategori_id')->get();
                                                         ?>
 
-                                                        <?php foreach ($kategoriName->getResult() as $rowNameKategori): ?>
-                                                            <li class="list-group-item"><?=$rowNameKategori->kategori;?> (<?=count($countMateriByKategori);?>)</li>
+                                                        <?php foreach ($queryMateri->getResult() as $rowMateri): ?>
+                                                            <?php
+                                                                $kategoriName = $dataKategori->where('id', $rowMateri->kategori_id)->get();
+                                                                $countMateriByKategori = $dataMateri->where('kategori_id', $rowMateri->kategori_id)->get()->getResultArray();
+                                                            ?>
+
+                                                            <?php foreach ($kategoriName->getResult() as $rowNameKategori): ?>
+                                                                <li class="list-group-item"><?=$rowNameKategori->kategori;?> (<?=count($countMateriByKategori);?>)</li>
+                                                            <?php endforeach;?>
                                                         <?php endforeach;?>
-                                                    <?php endforeach;?>
-                                                </ul>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    Masih dalam pengembangan
+                                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        Masih dalam pengembangan
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -102,12 +104,12 @@
     </div>
     <!-- END wrapper -->
 
-    <footer class="text-white pt-5 pb-5 bg-info">
+    <footer class="pt-5 pb-5 text-white bg-info">
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
                     <h4>Eksponen Bimbel</h4>
-                    <small class="mb-3 d-block text-white"> © <?=date("Y");?></small>
+                    <small class="mb-3 text-white d-block"> © <?=date("Y");?></small>
                 </div>
                 <div class="col-md-3 col-sm-4">
                     <h5>Materi</h5>

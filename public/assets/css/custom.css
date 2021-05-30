@@ -1,4 +1,7 @@
 /* Header */
+* {
+  font-family: "Poppins";
+}
 
 .linkHead:after {
   display: block;
