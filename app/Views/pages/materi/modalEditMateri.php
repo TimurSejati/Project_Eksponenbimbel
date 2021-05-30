@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="modalEditMateri" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalEditMateri" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,37 +8,43 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <?= form_open_multipart('', ['class' => 'formMateri']); ?>
-            <?= csrf_field(); ?>
+            <?=form_open_multipart('', ['class' => 'formMateri']);?>
+            <?=csrf_field();?>
             <div class="modal-body">
                 <div class="card m-b-30">
                     <div class="card-body">
-                        <input type="hidden" name="id" value="<?= $id; ?>">
+                        <input type="hidden" name="id" value="<?=$id;?>">
                         <div class="form-group">
                             <label for="judulMateri">Judul Materi</label>
-                            <input type="text" class="form-control" name="judulMateri" id="judulMateri" value="<?= $judul; ?>">
+                            <input type="text" class="form-control" name="judulMateri" id="judulMateri" value="<?=$judul;?>">
                             <div class="invalid-feedback errorJudul"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="ketMateri">Prolog Materi</label>
                             <!-- <textarea name="prolog" class="form-control"></textarea> -->
-                            <textarea name="prolog" id="editor1" class="form-control"><?= $prolog; ?></textarea>
+                            <textarea name="prolog" class="form-control"><?=$prolog;?></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ketMateri">Artikel Materi</label>
+                            <!-- <textarea name="prolog" class="form-control"></textarea> -->
+                            <textarea name="artikel" id="editor1" class="form-control"><?=$artikel;?></textarea>
                         </div>
 
                         <div class="getDataKategori"></div>
 
                         <div class="form-group">
                             <label>Upload Gambar</label>
-                            <input type="hidden" name="gambarLama" value="<?= $gambar; ?>">
-                            <input type="file" name="gambar" id="gambar" class="dropify" data-default-file="file/gambar/<?= $gambar; ?>" />
+                            <input type="hidden" name="gambarLama" value="<?=$gambar;?>">
+                            <input type="file" name="gambar" id="gambar" class="dropify" data-default-file="file/gambar/<?=$gambar;?>" />
                             <small class="errorGambar text-danger"></small>
                         </div>
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">Upload Materi</label>
-                            <input type="hidden" name="modulLama" value="<?= $file; ?>">
-                            <input type="file" name="file" id="input-file-now" class="dropify" data-default-file="file/modul/<?= $file; ?>" />
+                            <input type="hidden" name="modulLama" value="<?=$file;?>">
+                            <input type="file" name="file" id="input-file-now" class="dropify" data-default-file="file/modul/<?=$file;?>" />
                             <small class=" errorFile text-danger"></small>
                         </div>
                     </div>
@@ -48,7 +54,7 @@
                 <button type="submit" class="btn btn-primary btnUbah">Ubah</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
-            <?= form_close(); ?>
+            <?=form_close();?>
         </div>
     </div>
 </div>
@@ -56,10 +62,10 @@
 
 <script>
     function getDataForm() {
-        var kategoriId = "<?= $kategori ?>";
-        var kelasId = "<?= $kelas ?>";
+        var kategoriId = "<?=$kategori?>";
+        var kelasId = "<?=$kelas?>";
         $.ajax({
-            url: "<?= site_url('materi/getDataFormKategori'); ?>",
+            url: "<?=site_url('materi/getDataFormKategori');?>",
             dataType: 'json',
             data: {
                 kategori: kategoriId,
@@ -73,7 +79,16 @@
             }
         })
     }
-    CKEDITOR.replace('editor1');
+    CKEDITOR.replace('editor1', {
+            extraPlugins: 'mathjax',
+            mathJaxLib: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML',
+            height: 320
+
+            });
+
+        if (CKEDITOR.env.ie && CKEDITOR.env.version == 8) {
+        document.getElementById('ie8-warning').className = 'tip alert';
+        }
     $(document).ready(function() {
         getDataForm();
         // Basic
@@ -85,12 +100,12 @@
             let content = CKEDITOR.instances['editor1'].getData();
             let form = $('.formMateri')[0];
             let data = new FormData(form);
-            data.append('prolog', content);
+            data.append('artikel', content);
 
 
             $.ajax({
                 type: "POST",
-                url: "<?= site_url('materi/ubahData') ?>",
+                url: "<?=site_url('materi/ubahData')?>",
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,

@@ -14,7 +14,7 @@ class Materi extends BaseController
     public function getData()
     {
         if ($this->request->isAJAX()) {
-            $data = ['tampilData' =>  $this->materi->findAll()];
+            $data = ['tampilData' => $this->materi->findAll()];
 
             $id = $this->materi->find('kategori_id');
 
@@ -39,7 +39,7 @@ class Materi extends BaseController
     {
         if ($this->request->isAJAX()) {
             $data = [
-                'dataKategori' =>  $this->ktgr->findAll(),
+                'dataKategori' => $this->ktgr->findAll(),
                 'kategori' => $this->request->getVar('kategori'),
                 'kelas' => $this->request->getVar('kelas'),
             ];
@@ -75,7 +75,7 @@ class Materi extends BaseController
             $output = '';
             foreach ($data as $row) {
                 $condition = $row['id'] == $idKelas ? 'selected' : '';
-                $output .= '<option value="' . $row['id']  . '" ' . $condition . '  >' . $row['kelas'] . '</option>';
+                $output .= '<option value="' . $row['id'] . '" ' . $condition . '  >' . $row['kelas'] . '</option>';
             }
             echo json_encode($output);
         } else {
@@ -94,30 +94,30 @@ class Materi extends BaseController
                     'rules' => 'required|is_unique[materi.judul_materi]',
                     'errors' => [
                         'required' => '{field} wajib di isi',
-                        'is_unique' => '{field} sudah ada'
-                    ]
+                        'is_unique' => '{field} sudah ada',
+                    ],
                 ],
                 'kategori_id' => [
                     'label' => 'Kategori',
                     'rules' => 'required',
                     'errors' => [
-                        'required' => '{field} harus di isi'
-                    ]
+                        'required' => '{field} harus di isi',
+                    ],
                 ],
                 'gambar' => [
                     'label' => 'Gambar',
                     'rules' => 'mime_in[gambar,image/png,image/jpg,image/jpeg]|is_image[gambar]',
                     'errors' => [
                         'mime_in' => 'harus dalam bentuk gambar',
-                    ]
+                    ],
                 ],
                 'file' => [
                     'label' => 'File Materi',
                     'rules' => 'ext_in[file,pdf,docx,doc]',
                     'errors' => [
-                        'ext_in' => 'File yang diupload harus dalam bentuk extensi pdf atau doc'
-                    ]
-                ]
+                        'ext_in' => 'File yang diupload harus dalam bentuk extensi pdf atau doc',
+                    ],
+                ],
             ]);
 
             if (!$valid) {
@@ -126,14 +126,15 @@ class Materi extends BaseController
                         'kategori_id' => $validation->getError('kategori_id'),
                         'judulMateri' => $validation->getError('judulMateri'),
                         'gambar' => $validation->getError('gambar'),
-                        'file' => $validation->getError('file')
-                    ]
+                        'file' => $validation->getError('file'),
+                    ],
                 ];
             } else {
 
                 $judul = $this->request->getVar('judulMateri');
                 $slug = $this->seoURL($judul);
                 $prolog = $this->request->getVar('prolog');
+                $artikel = $this->request->getVar('artikel');
 
                 $kategoriId = $this->request->getVar('kategori_id');
                 $kelasId = $this->request->getVar('kelas_id');
@@ -147,14 +148,14 @@ class Materi extends BaseController
                 if ($fileGambar->getError() == 4) {
                     $namaGambar = 'default.png';
                 } else {
-                    $namaGambar =  $fileGambar->getRandomName();
+                    $namaGambar = $fileGambar->getName();
                     $fileGambar->move('file/gambar', $namaGambar);
                 }
 
                 if ($fileModul->getError() == 4) {
                     $namaModul = 'default.pdf';
                 } else {
-                    $namaModul =  $fileModul->getRandomName();
+                    $namaModul = $fileModul->getName();
                     $fileModul->move('file/modul', $namaModul);
                 }
 
@@ -162,6 +163,7 @@ class Materi extends BaseController
                     'judul_materi' => $judul,
                     'slug' => $slug,
                     'prolog_materi' => $prolog,
+                    'artikel_materi' => $artikel,
                     'kategori_id' => $kategoriId,
                     'kelas_id' => $kelasId,
                     'gambar' => $namaGambar,
@@ -190,12 +192,13 @@ class Materi extends BaseController
     {
         if ($this->request->isAJAX()) {
             $id = $this->request->getVar('id');
-            $row =  $this->materi->find($id);
+            $row = $this->materi->find($id);
 
             $data = [
                 'id' => $id,
                 'judul' => $row['judul_materi'],
                 'prolog' => $row['prolog_materi'],
+                'artikel' => $row['artikel_materi'],
                 'kategori' => $row['kategori_id'],
                 'kelas' => $row['kelas_id'],
                 'gambar' => $row['gambar'],
@@ -203,7 +206,7 @@ class Materi extends BaseController
             ];
 
             $msg = [
-                'success' => view('pages/materi/modalEditMateri', $data)
+                'success' => view('pages/materi/modalEditMateri', $data),
             ];
 
             echo json_encode($msg);
@@ -231,23 +234,23 @@ class Materi extends BaseController
                     'rules' => $ruleJudul,
                     'errors' => [
                         'required' => '{field} wajib di isi',
-                        'is_unique' => '{field} sudah ada'
-                    ]
+                        'is_unique' => '{field} sudah ada',
+                    ],
                 ],
                 'gambar' => [
                     'label' => 'Gambar',
                     'rules' => 'mime_in[gambar,image/png,image/jpg,image/jpeg]|is_image[gambar]',
                     'errors' => [
                         'mime_in' => 'harus dalam bentuk gambar',
-                    ]
+                    ],
                 ],
                 'file' => [
                     'label' => 'File Materi',
                     'rules' => 'ext_in[file,pdf,docx,doc]',
                     'errors' => [
-                        'ext_in' => 'File yang diupload harus dalam bentuk extensi pdf atau doc'
-                    ]
-                ]
+                        'ext_in' => 'File yang diupload harus dalam bentuk extensi pdf atau doc',
+                    ],
+                ],
             ]);
 
             if (!$valid) {
@@ -255,14 +258,15 @@ class Materi extends BaseController
                     'error' => [
                         'judulMateri' => $validation->getError('judulMateri'),
                         'gambar' => $validation->getError('gambar'),
-                        'file' => $validation->getError('file')
-                    ]
+                        'file' => $validation->getError('file'),
+                    ],
                 ];
             } else {
                 $id = $this->request->getVar('id');
                 $judul = $this->request->getVar('judulMateri');
                 $slug = $this->seoURL($judul);
                 $prolog = $this->request->getVar('prolog');
+                $artikel = $this->request->getVar('artikel');
                 $kategoriId = $this->request->getVar('kategori_id');
                 $kelasId = $this->request->getVar('kelas_id');
 
@@ -275,8 +279,8 @@ class Materi extends BaseController
                 if ($fileGambar->getError() == 4) {
                     $namaGambar = $gambarLama;
                 } else {
-                    $namaGambar = $fileGambar->getRandomName();
-                    $fileGambar->move('file/gambar', $namaGambar);
+                    $namaGambar = $fileGambar->getName();
+                    $fileGambar->move('file/gambar');
                     if ($gambarLama != 'default.png') {
                         unlink('file/gambar/' . $gambarLama);
                     }
@@ -285,7 +289,7 @@ class Materi extends BaseController
                 if ($fileModul->getError() == 4) {
                     $namaModul = $modulLama;
                 } else {
-                    $namaModul = $fileGambar->getRandomName();
+                    $namaModul = $fileModul->getName();
                     $fileModul->move('file/modul', $namaModul);
                     if ($modulLama != 'default.pdf') {
                         unlink('file/modul/' . $modulLama);
@@ -296,16 +300,17 @@ class Materi extends BaseController
                     'judul_materi' => $judul,
                     'slug' => $slug,
                     'prolog_materi' => $prolog,
+                    'artikel_materi' => $artikel,
                     'kategori_id' => $kategoriId,
                     'kelas_id' => $kelasId,
                     'gambar' => $namaGambar,
-                    'file' => $namaModul
+                    'file' => $namaModul,
                 ];
 
                 $this->materi->update($id, $data);
 
                 $msg = [
-                    'success' => "Data materi berhasil diubah"
+                    'success' => "Data materi berhasil diubah",
                 ];
             }
             echo json_encode($msg);
@@ -330,7 +335,6 @@ class Materi extends BaseController
             if ($fileLama != 'default.pdf') {
                 unlink('file/modul/' . $fileLama);
             }
-
 
             $this->materi->delete($id);
             $msg = ['success' => 'Data kategori berhasil dihapus'];

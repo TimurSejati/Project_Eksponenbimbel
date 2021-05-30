@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="modalTambahMateri" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalTambahMateri"  aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,8 +8,8 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <?= form_open_multipart('', ['class' => 'formMateri']); ?>
-            <?= csrf_field(); ?>
+            <?=form_open_multipart('', ['class' => 'formMateri']);?>
+            <?=csrf_field();?>
             <div class="modal-body">
                 <div class="card m-b-30">
                     <div class="card-body">
@@ -23,7 +23,12 @@
                         <div class="form-group">
                             <label for="ketMateri">Prolog Materi</label>
                             <!-- <textarea name="prolog" class="form-control"></textarea> -->
-                            <textarea name="prolog" id="editor1" class="form-control"></textarea>
+                            <textarea name="prolog"  class="form-control"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ketMateri">Artikel Materi</label>
+                            <textarea name="artikel" id="editor1" class="form-control"></textarea>
                         </div>
 
 
@@ -49,7 +54,7 @@
                 <button type="submit" class="btn btn-primary btnSimpan">Simpan</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
-            <?= form_close(); ?>
+            <?=form_close();?>
         </div>
     </div>
 </div>
@@ -57,7 +62,7 @@
 <script>
     function getDataForm() {
         $.ajax({
-            url: "<?= site_url('materi/getDataFormKategori'); ?>",
+            url: "<?=site_url('materi/getDataFormKategori');?>",
             dataType: 'json',
             success: function(response) {
                 $('.getDataKategori').html(response.data);
@@ -71,7 +76,23 @@
     $(document).ready(function() {
         getDataForm();
 
-        CKEDITOR.replace('editor1');
+        CKEDITOR.replace('editor1', {
+            extraPlugins: 'mathjax',
+            mathJaxLib: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML',
+            height: 320
+
+            });
+
+        if (CKEDITOR.env.ie && CKEDITOR.env.version == 8) {
+        document.getElementById('ie8-warning').className = 'tip alert';
+        }
+        // CKEDITOR.replace('editor1', {
+        //     uiColor : "#abcdef",
+        //     // extraPlugins: 'mathjax',
+        //     mathJaxLib: "//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML",
+        //     height: 500,
+        // });
+
 
 
         $('.btnSimpan').click(function(e) {
@@ -80,12 +101,12 @@
             let content = CKEDITOR.instances['editor1'].getData();
             let form = $('.formMateri')[0];
             let data = new FormData(form);
-            data.append('prolog', content);
+            data.append('artikel', content);
 
 
             $.ajax({
                 type: "POST",
-                url: "<?= site_url('materi/simpanData') ?>",
+                url: "<?=site_url('materi/simpanData')?>",
                 data: data,
                 enctype: 'multipart/form-data',
                 processData: false,

@@ -1,0 +1,16 @@
+/* Header */
+
+.linkHead:after {
+  display: block;
+  content: "";
+  border-bottom: solid 0.5px #fff;
+  transform: scaleX(0);
+  transition: transform 250ms ease-in-out;
+}
+.linkHead:hover:after {
+  transform: scaleX(1);
+}
+
+.linkHead:after {
+  transform-origin: 0% 50%;
+}

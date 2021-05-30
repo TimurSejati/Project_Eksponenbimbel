@@ -1,0 +1,24 @@
+{
+  "name": "ci4_eksponenbimbel",
+  "version": "1.0.0",
+  "description": "## What is CodeIgniter?",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TimurSejati/Project_eksponen_bimbel_ci4.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TimurSejati/Project_eksponen_bimbel_ci4/issues"
+  },
+  "homepage": "https://github.com/TimurSejati/Project_eksponen_bimbel_ci4#readme",
+  "dependencies": {}
+}
